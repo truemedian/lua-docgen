@@ -7,5 +7,5 @@ return {
 	author = {name = 'Nameless', email = 'truemedian@gmail.com'},
 	homepage = 'https://github.com/truemedian/lua-docgen',
 	dependencies = {'luvit/luvit'},
-	files = {'**.lua'},
+	files = {'**.lua', 'main.css'},
 }

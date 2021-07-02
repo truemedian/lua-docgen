@@ -380,6 +380,7 @@ local function collect_navigation(global_state)
 	for _, class in ipairs(global_state.classes) do
 		if #class.inherits == 0 then
 			table.insert(tlc, class.name)
+			tlc[class.name] = class
 		elseif not hierarchy_filter[class.name] then
 			for _, parent in ipairs(class.inherits) do
 				hierarchy[parent] = hierarchy[parent] or {}
@@ -398,16 +399,19 @@ local function collect_navigation(global_state)
 	table.insert(sections, make_class_section(hierarchy, 'Client', {'Client'}))
 	table.insert(sections, make_class_section(hierarchy, 'Containers', {'Container'}))
 
-	local tlc_filter = {Client = true, Container = true}
 	local utilities = {}
+	local structs = {}
 
 	for _, class in ipairs(tlc) do
-		if not tlc_filter[class] then
+		if tlc[class].tags.utility then
 			table.insert(utilities, class)
+		elseif tlc[class].tags.struct then
+			table.insert(structs, class)
 		end
 	end
 
 	table.insert(sections, make_class_section(hierarchy, 'Utilities', utilities))
+	table.insert(sections, make_class_section(hierarchy, 'Structures', structs))
 
 	return sections
 end
@@ -538,9 +542,9 @@ local function emit_type(buffer, classes, type)
 		if type.name == 'number' then
 			local min, max = type.annotation:match('(%d+),%s*(%d+)')
 
-			annotation = 'A number in thr range ' .. min .. ' to ' .. max .. ', inclusive.'
+			annotation = 'A number in the range ' .. min .. ' to ' .. max .. ', inclusive.'
 		elseif type.name == 'table' then
-			local key, value = type.annotation:match('(%w+), (%w+)')
+			local key, value = type.annotation:match('(%w+),%s*(%w+)')
 
 			if key and value then
 				annotation = 'An table with ' .. key .. ' keys and ' .. value .. ' values.'
@@ -1020,6 +1024,7 @@ local function emit_template_end(buffer)
 	write(buffer, '</html>', '\n')
 end
 
+local bundle = require 'luvi'.bundle
 local function write_documentation(global_state, src, dir)
 	local navigation = collect_navigation(global_state)
 	local state = collect_state(global_state)
@@ -1051,11 +1056,11 @@ local function write_documentation(global_state, src, dir)
 
 	fs.writeFileSync(dir .. '/Enumerations.html', table.concat(buffer));
 
-	local stylesheet = assert(fs.readFileSync(src .. '/../docgen/main.css'))
+	local stylesheet = assert(bundle.readfile('main.css'))
 	fs.writeFileSync(dir .. '/main.css', stylesheet);
 
 	buffer = {}
-	local readme = assert(fs.readFileSync(src .. '/../README.md'))
+	local readme = fs.readFileSync(src .. '/../README.md') or 'Missing README'
 	emit_template_begin(buffer, 'Home')
 	emit_navigation(buffer, data, 'Home')
 	write(buffer, markdown(readme), '\n')
