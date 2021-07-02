@@ -9,45 +9,47 @@
 ]=]
 
 --[=[ Class Constructor
-@constructor __init         -- The constructor's name (this should always be named __init)
-@param {type} {name}        -- A required parameter (may be multiple)
-@param? {type} {name}       -- An optional parameter (may be multiple)
-@tag {name}                 -- A constructor tag (may be multiple)
-@description {...}          -- A description of the constructor
+@constructor __init         		-- The constructor's name (this should always be named __init)
+@param {name} {type}        		-- A required parameter (may be multiple)
+@param? {name} {type}       		-- An optional parameter (may be multiple)
+@tag {name}                 		-- A constructor tag (may be multiple)
+@description {...}          		-- A description of the constructor
 ]=]
 
 --[=[ Metamethod
-@metamethod {metamethod}    -- The metamethod's name (prefixed with __)
-@description {...}          -- A description of any specific behavior this metamethod has
+@metamethod {metamethod}    		-- The metamethod's name (prefixed with __)
+@description {...}          		-- A description of any specific behavior this metamethod has
 ]=]
 
 --[=[ Static Method
-@static {method-name}       -- The static method's name
-@param {type} {name}        -- A required parameter (may be multiple)
-@param? {type} {name}       -- An optional parameter (may be multiple)
-@tag {name}                 -- A method tag (may be multiple)
-@returns {type}             -- A return value from the method (may be multiple)
-@description {...}          -- A description of the method
+@static {method-name}       		-- The static method's name
+@param {name} {type}        		-- A required parameter (may be multiple)
+@param? {name} {type} {default?}	-- An optional parameter (may be multiple)
+@tag {name}                 		-- A method tag (may be multiple)
+@returns {type}             		-- A return value from the method (may be multiple)
+@description {...}          		-- A description of the method
 ]=]
 
 --[=[ Method
-@method {method-name}       -- The method's name
-@param {type} {name}        -- A required parameter (may be multiple)
-@param? {type} {name}       -- An optional parameter (may be multiple)
-@tag {name}                 -- A method tag (may be multiple)
-@returns {type}             -- A return value from the method (may be multiple)
-@description {...}          -- A description of the method
+@method {method-name}       		-- The method's name
+@param {name} {type}        		-- A required parameter (may be multiple)
+@param? {name} {type} {default?} 	-- An optional parameter (may be multiple)
+@tag {name}                 		-- A method tag (may be multiple)
+@returns {type}             		-- A return value from the method (may be multiple)
+@description {...}          		-- A description of the method
 ]=]
 
 --[=[ Property
-@property {property-name}   -- The property's name
-@type {type}                -- The property's type
-@description {...}          -- A description of the property
+@property {property-name}  		 	-- The property's name
+@type {type}                		-- The property's type
+@description {...}          		-- A description of the property
 ]=]
 
 --[=[ * Available Tags
 Class Tags:
 - internal (this class should not be created or used by a user)
+- struct (this class is a structure, and provides an interface to some internal table)
+- utility (this class is a utility, and is not required in user code)
 
 Method Tags:
 - error_return (this function may return `nil, err`)
@@ -534,7 +536,7 @@ local function emit_type(buffer, classes, type)
 		local annotation
 
 		if type.name == 'number' then
-			local min, max = type.annotation:match('(%d+), (%d+)')
+			local min, max = type.annotation:match('(%d+),%s*(%d+)')
 
 			annotation = 'A number in thr range ' .. min .. ' to ' .. max .. ', inclusive.'
 		elseif type.name == 'table' then
