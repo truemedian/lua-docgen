@@ -699,7 +699,7 @@ local function emit_sub_toc(buffer, list, prefix)
 		write(buffer, '<li>', '\n')
 		buffer.indent = buffer.indent + 1
 
-		write(buffer, '<a href="', prefix .. slugify(obj.name), '">', obj.name, '</a>', '\n')
+		write(buffer, '<a href="#', prefix .. slugify(obj.name), '">', obj.name, '</a>', '\n')
 
 		buffer.indent = buffer.indent - 1
 		write(buffer, '</li>', '\n')
