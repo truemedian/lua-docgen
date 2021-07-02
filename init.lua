@@ -303,6 +303,10 @@ local function parse_file_chunk(global_state, chunk)
 	end
 end
 
+local function _enum_flag(n)
+	return string.format('0x%x', tonumber(bit.lshift(1ULL, n)))
+end
+
 local function parse_enumerations(global_state, chunk)
 	chunk = chunk:gsub('%-%-[^\n]*', '')
 
@@ -311,7 +315,14 @@ local function parse_enumerations(global_state, chunk)
 		local tbl = {name = enum, values = {}}
 
 		for name, value in comment:gmatch('(%S+)%s*=%s*([^,]+),') do
-			table.insert(tbl.values, {name = name, value = value:gsub('\'', '"')})
+			local val = value:gsub('\'', '"')
+			local flag = val:match('flag%((%d+)%)')
+
+			if flag then
+				val = _enum_flag(flag)
+			end
+
+			table.insert(tbl.values, {name = name, value = val})
 		end
 
 		table.insert(enums, tbl)
