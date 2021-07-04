@@ -731,10 +731,6 @@ local function emit_parameters(buffer, classes, params)
 		write(buffer, '<th>Parameter</th>', '\n')
 		write(buffer, '<th>Type</th>', '\n')
 
-		if params.has_optional then
-			write(buffer, '<th>Optional</th>', '\n')
-		end
-
 		buffer.indent = buffer.indent - 1
 		write(buffer, '</thead>', '\n')
 		write(buffer, '<tbody>', '\n')
@@ -744,16 +740,18 @@ local function emit_parameters(buffer, classes, params)
 			write(buffer, '<tr>', '\n')
 			buffer.indent = buffer.indent + 1
 
-			write(buffer, '<td>', param.name, '</td>', '\n')
+			write(buffer, '<td>', param.name)
+
+			if param.optional then
+				write(buffer, '<abbr class="note" title="Optional">?</div>')
+			end
+
+			write(buffer, '</td>', '\n')
 			write(buffer, '<td>')
 
 			emit_types(buffer, classes, param.types)
 
 			write(buffer, '</td>', '\n')
-
-			if params.has_optional then
-				write(buffer, '<td>', param.optional and 'Y' or '', '</td>', '\n')
-			end
 
 			buffer.indent = buffer.indent - 1
 			write(buffer, '</tr>', '\n')
