@@ -136,6 +136,7 @@ table.parameters, table.properties {
 #content abbr.note {
     vertical-align: top;
     font-size: 75%;
+    margin-left: 2px;
 }
 
 #content span.annotated:hover p {

@@ -118,7 +118,7 @@ do
 	local C, Cg, Cp, Ct, P, S, V = lpeg.C, lpeg.Cg, lpeg.Cp, lpeg.Ct, lpeg.P, lpeg.S, lpeg.V
 	lpeg.locale(lpeg)
 
-	local type_name = C(lpeg.alpha ^ 1)
+	local type_name = C(lpeg.alnum ^ 1)
 	local type_anchor = '#' * C(lpeg.alnum ^ 1)
 	local type_annotation = P {'[' * C(((1 - S '[]') + V(1)) ^ 0) * ']'}
 
