@@ -154,17 +154,21 @@ table.parameters, table.properties {
 
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
 }
 
 #content .table-of-contents li {
-    padding: 4px 6px;
+    padding: 8px 6px;
 }
 
 #content .sub-table-of-contents li {
-    padding: 4px 6px;
+    padding: 8px 16px;
 
-    min-width: 20%;
+    width: 20%;
+    min-width: min-content;
+}
+
+#content .sub-table-of-contents li.filler {
+    margin: auto;
 }
 
 /* .parameters "Type", .parameters "Optional", .properties "Type", .properties "Value" */

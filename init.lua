@@ -715,6 +715,8 @@ local function emit_sub_toc(buffer, list, prefix)
 		buffer.indent = buffer.indent - 1
 		write(buffer, '</li>', '\n')
 	end
+	
+	write(buffer, '<li class="filler"></li>', '\n')
 
 	buffer.indent = buffer.indent - 1
 	write(buffer, '</ul>', '\n')
